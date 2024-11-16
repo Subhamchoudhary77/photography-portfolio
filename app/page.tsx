@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, Instagram, GalleryVerticalIcon } from "lucide-react";
+import { X, ChevronRight, Instagram, GalleryVerticalIcon, Menu } from "lucide-react";
 import { createClient } from 'pexels';
 
 const client = createClient('563492ad6f91700001000001ade6c731e2ba4ab38c8372715ec5bf99');
@@ -46,6 +46,7 @@ export default function Home() {
   const [galleryPhotos, setGalleryPhotos] = useState<Photo[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Fetch photos from Pexels API
   useEffect(() => {
@@ -56,8 +57,6 @@ export default function Home() {
           per_page: 500,
         });
 
-        console.log(response);
-
         if ('media' in response) {
           const photos = response?.media.map((photo: any, index: number) => ({
             id: photo?.id,
@@ -66,7 +65,6 @@ export default function Home() {
             price: "Starting From ₹200", 
             description: photo?.photographer,
           }));
-          console.log(photos);
           setFeaturedPhotos(photos?.slice(6,24)); 
           setGalleryPhotos(photos?.slice(3));
         }
@@ -84,8 +82,7 @@ export default function Home() {
       setCurrentPhotoIndex(
         (prevIndex) => (prevIndex + 1) % featuredPhotos.length
       );
-    }, 5000);
-    console.log(currentPhotoIndex);
+    }, 10000);
     return () => clearInterval(timer);
   }, [featuredPhotos]);
 
@@ -129,7 +126,15 @@ export default function Home() {
                 <img src="/logo.png" alt="" />
               </div>
             </Link>
-            <div className="flex space-x-6">
+            <button
+              className="md:hidden flex items-center"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <Menu size={24} />
+            </button>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-6">
               {menuItems.map((item) => (
                 <Link
                   key={item.id}
@@ -143,6 +148,48 @@ export default function Home() {
           </nav>
         </div>
       </header>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
+            onClick={() => setMenuOpen(false)}
+          >
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              className="fixed top-0 right-0 bg-white w-3/4 h-full p-6 z-60"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold">Menu</h2>
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex flex-col space-y-4">
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className="text-lg font-medium text-gray-600 hover:text-gray-800"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="pt-16">
         <section
