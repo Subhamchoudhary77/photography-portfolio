@@ -81,7 +81,7 @@ export default function Home() {
       setCurrentPhotoIndex(
         (prevIndex) => (prevIndex + 1) % featuredPhotos.length
       );
-    }, 5000);
+    }, 10000);
     return () => clearInterval(timer);
   }, [featuredPhotos]);
 
