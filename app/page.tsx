@@ -344,7 +344,7 @@ export default function Home() {
                       {featuredPhotos[currentPhotoIndex]?.price}
                     </span>
                     <Link
-                      href={`https://wa.me/8882999775?text=I'm interested in purchasing the print "${featuredPhotos[currentPhotoIndex]?.title}" for ${featuredPhotos[currentPhotoIndex]?.price}`}
+                      href={`https://wa.me/+918882999775?text=I'm interested in purchasing the print "${featuredPhotos[currentPhotoIndex]?.title}" for ${featuredPhotos[currentPhotoIndex]?.price}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -397,7 +397,7 @@ export default function Home() {
               />
               <p className="text-gray-600 mb-6">{selectedPhoto.description}</p>
               <Link
-                href={`https://wa.me/8882999775?text=I'm interested in purchasing a print of "${selectedPhoto.title}"`}
+                href={`https://wa.me/+918882999775?text=I'm interested in purchasing a print of "${selectedPhoto.title}"`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
